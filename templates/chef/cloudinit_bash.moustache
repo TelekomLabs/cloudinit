@@ -1,0 +1,47 @@
+#!/bin/bash
+root="/etc/chef"
+
+exists() {
+    if command -v $1 &>/dev/null 
+    then 
+        return 0 
+    else 
+        return 1 
+    fi
+} 
+
+apt-get install -y curl
+
+install_sh="https://www.opscode.com/chef/install.sh"
+version_string=
+
+if ! exists /usr/bin/chef-client; then 
+    if exists wget; then
+        bash <(wget ${install_sh} -O -) ${version_string} 
+    elif exists curl; then
+        bash <(curl -L ${install_sh}) ${version_string} 
+    else
+        echo "Neither wget nor curl found. Please install one and try again." >&2
+        exit 1 
+    fi
+fi
+
+mkdir -p $root
+
+cat > $root/validator.pem <<'EOP' 
+{{{validator_key}}}
+EOP
+
+chmod 0600 $root/validation.pem
+cat > $root/client.rb <<'EOP'
+    validation_client_name "{{{client.validation_client_name}}}"
+    validation_key "/etc/chef/validator.pem"
+    chef_server_url "{{{client.chef_server_url}}}"
+    # Logging
+    # log_level :debug
+EOP
+cat > $root/dna.json <<'EOP' 
+{{{dna}}}
+EOP
+
+chef-client -j /etc/chef/dna.json 2>&1 | tee -a /var/log/chef-client.log

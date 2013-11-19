@@ -1,0 +1,54 @@
+#ps1
+
+#run this script directly with 
+# powershell -executionpolicy bypass -file <Filename>
+
+# print system information
+Get-WmiObject -Class Win32_OperatingSystem -ComputerName localhost |
+Select-Object -Property CSName,LastBootUpTime
+
+'download chef client'
+
+$webclient = New-Object System.Net.WebClient
+$url = "https://opscode-omnibus-packages.s3.amazonaws.com/windows/2008r2/x86_64/chef-client-11.6.0-1.windows.msi" 
+$file = "$env:temp\chef-client-11.6.0-1.windows.msi" 
+$webclient.DownloadFile($url,$file)
+
+'install chef client'
+
+# 'msiexec abc.msi /qb ADDLOCAL=ALL' installs all features of this msi. We use this to install the chef-service for windows
+# http://www.microsoft.com/en-us/download/details.aspx?id=3138
+# you will figure out the features via orca tool from Microsoft
+$arguments= ' /qb ADDLOCAL=ALL' 
+Start-Process `
+     -file  $file `
+     -arg $arguments `
+     -passthru | wait-process
+
+'create client.rb'
+
+New-Item c:\chef\client.rb -type file -force -value '
+
+validation_client_name "{{{client.validation_client_name}}}" 
+chef_server_url "{{{client.chef_server_url}}}"
+
+# Logging
+log_level :debug
+log_location "C:/chef/chefclient.log"
+
+'
+
+'create validation.pem'
+
+New-Item c:\chef\validation.pem -type file -force -value '
+{{{validator_key}}}
+'
+
+'start chef-client'
+# we use the chef service, because the chef-client does not work reliable
+Start-Process -Wait C:\opscode\chef\bin\chef-service-manager
+
+# Microsoft does not allow to set deferred start via Set-Service. Therefore we set this hack to the registry
+Set-ItemProperty -Path "Registry::HKLM\System\CurrentControlSet\Services\chef-client" -Name "DelayedAutostart" -Value 1 -Type DWORD
+
+# run chef client here

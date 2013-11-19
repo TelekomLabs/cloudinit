@@ -1,0 +1,17 @@
+{
+    "target" : "unix",
+    "chef": {
+        "validator_key": "",
+        "client": {
+            "chef_server_url": "https://chef-server.example.com/organizations/orgname",
+            "validation_client_name": "validator"
+        },
+        "dna": {
+            "tomcat": {
+                "base_version": 7,
+                "keytool": "/usr/lib/jvm/java-6-openjdk-amd64/bin/keytool"
+            },
+            "run_list": ["role[apt]", "tomcat"]
+        }
+    }
+}
