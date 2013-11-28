@@ -1,5 +1,7 @@
 # Cloudinit
 
+[![build status](https://secure.travis-ci.org/TelekomLabs/cloudinit.png)](http://travis-ci.org/TelekomLabs/cloudinit)
+
 a lib to generate cloudinit files
 
 **Under construction...**
