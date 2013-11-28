@@ -1,6 +1,6 @@
 {
   "name": "cloudinit-node",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Manage Cloud and DevOps",
   "homepage": "http://www.laboratories.telekom.com",
   "author": {
@@ -8,9 +8,11 @@
     "email": "c.hartmann@telekom.de",
     "url": "http://www.laboratories.telekom.com"
   },
-  "licenses": [{
-    "type": "Apache 2"
-  }],
+  "licenses": [
+    {
+      "type": "Apache 2"
+    }
+  ],
   "dependencies": {
     "pkgcloud": "~0.8.3",
     "hogan.js": "git+https://github.com/twitter/hogan.js.git"
@@ -18,8 +20,8 @@
   "devDependencies": {
     "grunt-contrib-jshint": "~0.2.0",
     "grunt-mocha-test": "~0.7.0",
-    "pem" : "*",
-    "should" : "*"
+    "pem": "*",
+    "should": "*"
   },
   "scripts": {
     "test": "grunt test --verbose"
