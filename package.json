@@ -3,6 +3,13 @@
   "version": "0.1.0",
   "description": "Manage Cloud and DevOps",
   "homepage": "http://www.laboratories.telekom.com",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:TelekomLabs/cloudinit.git"
+  },
+  "bugs": {
+    "url": "http://github.com/TelekomLabs/cloudinit/issues"
+  },
   "author": {
     "name": "Christoph Hartmann",
     "email": "c.hartmann@telekom.de",
