@@ -21,7 +21,6 @@
     }
   ],
   "dependencies": {
-    "pkgcloud": "~0.8.3",
     "hogan.js": "git+https://github.com/twitter/hogan.js.git"
   },
   "devDependencies": {
