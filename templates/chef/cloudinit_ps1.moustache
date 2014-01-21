@@ -44,11 +44,20 @@ New-Item c:\chef\validation.pem -type file -force -value '
 {{{validator_key}}}
 '
 
+
+'create dna.json'
+New-Item c:\chef\dna.json -type file -force -value '
+{{{dna}}}
+'
+
 'start chef-client'
-# we use the chef service, because the chef-client does not work reliable
+
+# run chef client here
+Start-Process -Wait C:\opscode\chef\bin\chef-client -arg "-j c:\chef\dna.json"
+
+# we use the chef service
 Start-Process -Wait C:\opscode\chef\bin\chef-service-manager
 
 # Microsoft does not allow to set deferred start via Set-Service. Therefore we set this hack to the registry
 Set-ItemProperty -Path "Registry::HKLM\System\CurrentControlSet\Services\chef-client" -Name "DelayedAutostart" -Value 1 -Type DWORD
 
-# run chef client here
